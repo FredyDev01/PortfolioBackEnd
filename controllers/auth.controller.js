@@ -24,25 +24,16 @@ const DevAuth = {
         }        
     },
 
-    Logout: (req, res)=> {       
-        const RefreshToken = req.cookies.refreshToken
-        if(RefreshToken){
-            res.clearCookie('refreshToken')
-            res.status(200).json({Mensaje: 'Sesion cerrada'})
-        }else res.status(203).json({Mensaje: 'La cookie no existe'})         
-    },
-
     GetToken: (req, res)=>{
         try{
-            const RefreshToken = req.cookies.refreshToken   
+            const RefreshToken = req.headers.refreshtoken                        
             if(RefreshToken && RefreshToken != ''){
                 const Verficacion = jwt.verify(RefreshToken, process.env.JWT_REFRESH)
-                if(Verficacion){
-                    const uid = req.params.uid
-                    const { token, expiresIn } = GenerateToken(uid)
+                if(Verficacion){                    
+                    const { token, expiresIn } = GenerateToken(1)
                     res.status(200).json({token, expiresIn})
-                }else throw 'RefreshToken ya no es valido, vuelva a iniciar sesion.'
-            }else res.status(203).json({token: null})
+                }else res.status(500).json({Mensaje: 'El RefreshToken ingrezado no es valido.'})
+            }else res.status(500).json({Mensaje: 'El RefreshToken requerido no existe.'})
         }catch(err){
             console.log(err)
             res.status(500).json({Mensaje: 'Error del servidor al generar el token.'})
