@@ -16,12 +16,11 @@ const GenerateRefreshToken = (uid, res) => {
     try{
         const refreshToken = jwt.sign({uid}, process.env.JWT_REFRESH, {expiresIn})                                
         res.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
+            httpOnly: true,            
             //secure: true,
-            secure: false,
-            expires: new Date(Date.now() + expiresIn * 1000),
+            //expires: new Date(Date.now() + expiresIn * 1000),
             //sameSite: 'none',
-            //domain: 'https://portafolio-web-frontend-2b7ac.web.app'              
+            domain: 'https://portafolio-frontend-7e2a.onrender.com'              
         })
     }catch(err){
         console.log(err)

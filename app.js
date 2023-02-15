@@ -14,7 +14,7 @@ require('dotenv').config()
 
 
 //Configuration cors
-const whiteList = ['https://portafolio-web-frontend-2b7ac.web.app', 'http://localhost:8080'] 
+const whiteList = ['https://portafolio-frontend-7e2a.onrender.com', 'http://localhost:8080'] 
 app.use(cors({
     origin: (origin, callback) => {
         if(!origin || whiteList.includes(origin)){
