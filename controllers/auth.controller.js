@@ -14,9 +14,8 @@ const DevAuth = {
                 const vld_pasword = await bycript.compare(Password, user.Password)
                 if(vld_pasword){                         
                     const { token, expiresIn } = GenerateToken(user._id)                    
-                    GenerateRefreshToken(user._id, res)                    
-                    console.log(token)
-                    res.status(200).json({token, expiresIn})
+                    const { refreshToken } = GenerateRefreshToken(user._id)                    
+                    res.status(200).json({token, expiresIn, refreshToken})
                 }else res.status(203).json({Mensaje: 'Password invalido'})
             }else res.status(203).json({Mensaje: 'Email invalido'})
         }catch(err){
