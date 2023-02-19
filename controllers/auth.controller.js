@@ -28,7 +28,6 @@ const DevAuth = {
         try{
             const RefreshToken = req.headers.refreshtoken                        
             if(RefreshToken && RefreshToken != ''){
-                console.log(RefreshToken)
                 const Verficacion = jwt.verify(RefreshToken, process.env.JWT_REFRESH)
                 if(Verficacion){                    
                     const { token, expiresIn } = GenerateToken()
