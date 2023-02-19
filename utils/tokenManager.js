@@ -1,20 +1,20 @@
 const jwt = require('jsonwebtoken')
 
 
-const GenerateToken = (uid) => {
+const GenerateToken =()=> {
     const expiresIn = 60 * 15
     try{
-        const token = jwt.sign({uid}, process.env.JWT_SECRET, {expiresIn})        
+        const token = jwt.sign({'Owner': 'Fredy'}, process.env.JWT_SECRET, {expiresIn})                
         return { token, expiresIn }
     }catch(err){
         console.log(err)        
     }
 }
 
-const GenerateRefreshToken = (uid, res) => {
+const GenerateRefreshToken =()=> {
     const expiresIn = 60 * 60 * 24 * 30
     try{
-        const refreshToken = jwt.sign({uid}, process.env.JWT_REFRESH, {expiresIn})                                
+        const refreshToken = jwt.sign({'Owner': 'Fredy'}, process.env.JWT_REFRESH, {expiresIn})                                
         return refreshToken
     }catch(err){
         console.log(err)

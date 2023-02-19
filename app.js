@@ -14,10 +14,10 @@ require('dotenv').config()
 
 
 //Configuration cors
-const whiteList = ['https://portafolio-web-frontend-bf06a.web.app', 'http://localhost:8080'] 
+const whiteList = ['https://portafolio-web-frontend-7237c.web.app'] 
 app.use(cors({
-    origin: (origin, callback) => {
-        if(!origin || whiteList.includes(origin)){
+    origin: (origin, callback) => {        
+        if(origin || whiteList.includes(origin)){
             return callback(null, origin)
         }         
         return callback(new Error('Url no permitida:', origin))        

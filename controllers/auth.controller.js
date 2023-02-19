@@ -13,8 +13,8 @@ const DevAuth = {
             if(user){
                 const vld_pasword = await bycript.compare(Password, user.Password)
                 if(vld_pasword){                         
-                    const { token, expiresIn } = GenerateToken(user._id)                    
-                    const { refreshToken } = GenerateRefreshToken(user._id)                    
+                    const { token, expiresIn } = GenerateToken()                    
+                    const refreshToken = GenerateRefreshToken()                    
                     res.status(200).json({token, expiresIn, refreshToken})
                 }else res.status(203).json({Mensaje: 'Password invalido'})
             }else res.status(203).json({Mensaje: 'Email invalido'})
@@ -28,9 +28,10 @@ const DevAuth = {
         try{
             const RefreshToken = req.headers.refreshtoken                        
             if(RefreshToken && RefreshToken != ''){
+                console.log(RefreshToken)
                 const Verficacion = jwt.verify(RefreshToken, process.env.JWT_REFRESH)
                 if(Verficacion){                    
-                    const { token, expiresIn } = GenerateToken(1)
+                    const { token, expiresIn } = GenerateToken()
                     res.status(200).json({token, expiresIn})
                 }else res.status(500).json({Mensaje: 'El RefreshToken ingrezado no es valido.'})
             }else res.status(500).json({Mensaje: 'El RefreshToken requerido no existe.'})
