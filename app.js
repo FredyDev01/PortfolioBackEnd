@@ -1,14 +1,12 @@
 const express = require('express')
 const app = express()
 const morgan = require('morgan')
-const cookieParser = require('cookie-parser')
 const cors = require('cors')
 
 
 //Configuration middlewares
 app.use(express.urlencoded({extended: true}))
 app.use(express.json({limit: '70mb'}))
-app.use(cookieParser())
 app.use(morgan('dev'))
 require('dotenv').config()
 
@@ -16,8 +14,8 @@ require('dotenv').config()
 //Configuration cors
 const whiteList = ['https://portafolio-web-frontend-7237c.web.app'] 
 app.use(cors({
-    origin: (origin, callback) => {        
-        if(origin || whiteList.includes(origin)){
+    origin: (origin, callback) => {    
+        if(whiteList.includes(origin)){
             return callback(null, origin)
         }         
         return callback(new Error('Url no permitida:', origin))        
