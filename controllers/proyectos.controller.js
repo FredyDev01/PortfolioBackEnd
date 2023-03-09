@@ -64,9 +64,9 @@ const DevProyectos = {
             const Proyecto = new mdl_proyectos(Data)
             if(Data.Base64Image){                
                 const Img = await mdl_proyectos.findOne({_id: Id})                
-                await cloudinary.v2.uploader.upload(Data.Base64Image, {public_id: Img.NameImage})
+                await cloudinary.v2.uploader.upload(Data.Base64Image, {public_id: Img.NameImage, invalidate: true})
                 delete Data.Base64Image
-            }                        
+            }
             await mdl_proyectos.updateOne({_id: Id}, {$set: Proyecto})
             res.status(200).json({Mensaje: 'Proyecto editado con exito.'})
         }
