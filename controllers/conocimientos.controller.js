@@ -47,9 +47,9 @@ const DevConocimientos = {
             const Id = parseInt(req.params.id)
             const Data = req.body                                    
             if(Data.Base64Image){                
-                const Document = await mdl_conocimientos.findOne({_id: Id})                                
-                const Img = await cloudinary.v2.uploader.upload(Data.Base64Image, {public_id: Document.NameImage})
-                Data.UrlImage = Img.secure_url
+                const Image = await mdl_conocimientos.findOne({_id: Id})                                
+                const Upload = await cloudinary.v2.uploader.upload(Data.Base64Image, {public_id: Image.NameImage})
+                Data.UrlImage = Upload.url + '?timestamp=' + new Date().toLocaleTimeString()
                 delete Data.Base64Image
             }
             const Conocimiento = new mdl_conocimientos(Data)                        

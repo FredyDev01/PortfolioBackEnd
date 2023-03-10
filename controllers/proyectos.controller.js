@@ -15,7 +15,7 @@ const DevProyectos = {
                 if(req.query.Tipo) Filtros.Tipo = req.query.Tipo
                 if(req.query.Tec) Filtros.Tecnologias = {$all: req.query.Tec.split(',')}      
                 if(req.query.Page) Paginate.limit = 6, Paginate.page = req.query.Page                
-                const consult = await mdl_proyectos.paginate(Filtros, Paginate)                
+                const consult = await mdl_proyectos.paginate(Filtros, Paginate)     
                 res.status(200).json({Datos: consult.docs, MaxPage: consult.totalPages})
             }else{
                 const consult = await mdl_proyectos.findById(Id)
@@ -61,12 +61,13 @@ const DevProyectos = {
         try{
             const Id = parseInt(req.params.id)
             const Data = req.body            
-            const Proyecto = new mdl_proyectos(Data)
             if(Data.Base64Image){                
-                const Img = await mdl_proyectos.findOne({_id: Id})                
-                await cloudinary.v2.uploader.upload(Data.Base64Image, {public_id: Img.NameImage, invalidate: true})
+                const Image = await mdl_proyectos.findOne({_id: Id})                
+                const Upload = await cloudinary.v2.uploader.upload(Data.Base64Image, {public_id: Image.NameImage, invalidate: true})
+                Data.UrlImage = Upload.url + '?timestamp=' + new Date().toLocaleTimeString()
                 delete Data.Base64Image
             }
+            const Proyecto = new mdl_proyectos(Data)
             await mdl_proyectos.updateOne({_id: Id}, {$set: Proyecto})
             res.status(200).json({Mensaje: 'Proyecto editado con exito.'})
         }
