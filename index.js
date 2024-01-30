@@ -1,21 +1,26 @@
-const app = require('./app')
-const mongoose = require('mongoose')
-const Puerto = process.env.PORT || 3000
+import cloudinary from 'cloudinary'
+import mongoose from 'mongoose'
 
+import app from './app.js'
 
-//Route error 404
-app.use((req, res, next)=>{
-    res.status(404).send('La direccion de la peticion es incorrecta.')
+const port = process.env.PORT || 3000
+
+app.use((req, res) => {
+  res.status(404).send('La direccion de la peticion es incorrecta.')
 })
 
-
-//Starting DB y Server
-mongoose.set("strictQuery", true)
-mongoose.connect(`mongodb+srv://Fredy:${process.env.DB_PASSWORD}@cluster0.mbll53k.mongodb.net/?retryWrites=true&w=majority`, {useNewUrlParser: true})
-.then((e) => {
-    console.log('Base de datos conectada con exito al servidor')
-    app.listen(Puerto, ()=>{
-        console.log(`El servidor se inicio en http://localhost:${Puerto}`)
-    })
+cloudinary.v2.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 })
-.catch(err => console.log(err))
+
+mongoose.set('strictQuery', true)
+mongoose
+  .connect(
+    `mongodb+srv://Fredy:${process.env.DB_PASSWORD}@cluster0.mbll53k.mongodb.net/portfolio?retryWrites=true&w=majority`,
+    { useNewUrlParser: true }
+  )
+  .then(() => {
+    app.listen(port)
+  })

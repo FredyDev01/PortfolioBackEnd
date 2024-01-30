@@ -1,0 +1,56 @@
+{
+  "env": {
+    "es2021": true,
+    "node": true
+  },
+  "extends": ["standard", "eslint-config-prettier"],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": ["import"],
+  "rules": {
+    "curly": ["error", "all"],
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "../midelwares/**",
+            "group": "internal"
+          },
+          {
+            "pattern": "../models/**",
+            "group": "internal"
+          },
+          {
+            "pattern": "../routes/**",
+            "group": "internal"
+          },
+          {
+            "pattern": "../utils/**",
+            "group": "internal"
+          },
+          {
+            "pattern": "../controllers/**",
+            "group": "internal",
+            "position": "after"
+          }
+        ],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ]
+  }
+}
