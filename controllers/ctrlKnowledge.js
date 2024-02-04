@@ -44,7 +44,7 @@ const ctrKnowledge = {
       const data = req.body
       const { url, public_id: publicId } = await cloudinary.v2.uploader.upload(
         req.file.base64,
-        { public_id: uuidv4(), folder: 'Images_Conocimientos' }
+        { public_id: uuidv4(), folder: 'Knowledges' }
       )
       data.urlImage = url
       data.nameImage = publicId

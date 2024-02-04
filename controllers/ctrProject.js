@@ -49,7 +49,7 @@ const ctrProject = {
       const data = req.body
       const { url, public_id: publicId } = await cloudinary.v2.uploader.upload(
         req.file.base64,
-        { public_id: uuidv4(), folder: 'Images_Proyectos' }
+        { public_id: uuidv4(), folder: 'Projects' }
       )
       data.urlImage = url
       data.nameImage = publicId
