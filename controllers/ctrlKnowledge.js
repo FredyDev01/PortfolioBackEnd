@@ -1,8 +1,6 @@
-import cloudinary from 'cloudinary'
-import { v4 as uuidv4 } from 'uuid'
-
 import MdlKnowledge from '../models/mdlKnowledge.js'
 import MdlProject from '../models/mdlProject.js'
+import { actions, handleImage } from '../utils/image.js'
 
 const ctrKnowledge = {
   getKnowledges: async (req, res) => {
@@ -42,10 +40,11 @@ const ctrKnowledge = {
   addKnowledge: async (req, res) => {
     try {
       const data = req.body
-      const { url, public_id: publicId } = await cloudinary.v2.uploader.upload(
-        req.file.base64,
-        { public_id: uuidv4(), folder: 'Knowledges' }
-      )
+      const { url, public_id: publicId } = await handleImage({
+        action: actions.addImage,
+        folder: 'Knowledges',
+        imageBase64: req.file.base64,
+      })
       data.urlImage = url
       data.nameImage = publicId
       const knowledges = new MdlKnowledge(data)
@@ -72,7 +71,9 @@ const ctrKnowledge = {
       const data = req.body
       if (req.file) {
         const { nameImage } = await MdlKnowledge.findOne({ _id: id })
-        const { url } = await cloudinary.v2.uploader.upload(req.file.base64, {
+        const { url } = await handleImage({
+          action: actions.editImage,
+          imageBase64: req.file.base64,
           public_id: nameImage,
         })
         data.urlImage = url
@@ -110,7 +111,7 @@ const ctrKnowledge = {
           }
         })
       }
-      await cloudinary.v2.uploader.destroy(nameImage)
+      await handleImage({ action: actions.deleteImage, public_id: nameImage })
       await MdlKnowledge.deleteOne({ _id: id })
       const documents = await MdlKnowledge.paginate({}, { limit: 6 })
       res.status(200).json({ maxPage: documents.totalPages, modifiedProject })

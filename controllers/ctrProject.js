@@ -1,7 +1,5 @@
-import cloudinary from 'cloudinary'
-import { v4 as uuidv4 } from 'uuid'
-
 import MdlProject from '../models/mdlProject.js'
+import { actions, handleImage } from '../utils/image.js'
 
 const ctrProject = {
   getProjects: async (req, res) => {
@@ -47,10 +45,11 @@ const ctrProject = {
   addProject: async (req, res) => {
     try {
       const data = req.body
-      const { url, public_id: publicId } = await cloudinary.v2.uploader.upload(
-        req.file.base64,
-        { public_id: uuidv4(), folder: 'Projects' }
-      )
+      const { url, public_id: publicId } = await handleImage({
+        action: actions.addImage,
+        folder: 'Projects',
+        imageBase64: req.file.base64,
+      })
       data.urlImage = url
       data.nameImage = publicId
       const project = new MdlProject(data)
@@ -73,7 +72,9 @@ const ctrProject = {
       const data = req.body
       if (req.file) {
         const { nameImage } = await MdlProject.findOne({ _id: id })
-        const { url } = await cloudinary.v2.uploader.upload(req.file.base64, {
+        const { url } = await handleImage({
+          action: actions.editImage,
+          imageBase64: req.file.base64,
           public_id: nameImage,
         })
         data.urlImage = url
@@ -93,7 +94,7 @@ const ctrProject = {
       let { id } = req.params
       id = parseInt(10, id)
       const { nameImage } = await MdlProject.findOne({ _id: id })
-      await cloudinary.v2.uploader.destroy(nameImage)
+      await handleImage({ action: actions.deleteImage, public_id: nameImage })
       await MdlProject.deleteOne({ _id: id })
       res.status(200).json({ message: 'El proyecto se elimino con exito.' })
     } catch (err) {
