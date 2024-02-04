@@ -75,7 +75,7 @@ const ctrProject = {
         const { url } = await handleImage({
           action: actions.editImage,
           imageBase64: req.file.base64,
-          public_id: nameImage,
+          publicId: nameImage,
         })
         data.urlImage = url
       }
@@ -94,7 +94,7 @@ const ctrProject = {
       let { id } = req.params
       id = parseInt(10, id)
       const { nameImage } = await MdlProject.findOne({ _id: id })
-      await handleImage({ action: actions.deleteImage, public_id: nameImage })
+      await handleImage({ action: actions.deleteImage, publicId: nameImage })
       await MdlProject.deleteOne({ _id: id })
       res.status(200).json({ message: 'El proyecto se elimino con exito.' })
     } catch (err) {

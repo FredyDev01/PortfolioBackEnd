@@ -101,8 +101,12 @@ const ctrKnowledge = {
       if (listProjects.length) {
         modifiedProject = true
         listProjects.forEach(async (project) => {
-          const { technologies, _id } = project
+          const { _id, nameImage, technologies } = project
           if (technologies.length <= 1) {
+            await handleImage({
+              action: actions.deleteImage,
+              publicId: nameImage,
+            })
             await MdlProject.deleteOne({ _id })
           } else {
             const index = technologies.indexOf(title)
@@ -111,7 +115,7 @@ const ctrKnowledge = {
           }
         })
       }
-      await handleImage({ action: actions.deleteImage, public_id: nameImage })
+      await handleImage({ action: actions.deleteImage, publicId: nameImage })
       await MdlKnowledge.deleteOne({ _id: id })
       const documents = await MdlKnowledge.paginate({}, { limit: 6 })
       res.status(200).json({ maxPage: documents.totalPages, modifiedProject })
